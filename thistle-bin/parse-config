@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+#####################################
+# Common helper function
+#####################################
+parse_config() {
+  local config_file="$1"
+
+  for i in "project" "location" "keyring" "keyname"; do
+    v="$(jq -r .${i} < "$config_file")"
+    if [ -z "$v" ] || [ "$v" = "null" ]; then
+      >&2 echo "error: missing ${i} value in $config_file"
+      exit 1
+    else
+      config+=("$v")
+    fi
+  done
+}
+
+# Check active project is expected project
+check_project() {
+  local expected_project="$1"
+  local active_project
+  active_project="$(gcloud config get-value project)"
+  [[ "$expected_project" == "$active_project" ]] || \
+    {
+      echo "active project ($active_project) does not match expected project ($expected_project)";
+      return 1; 
+    }
+}

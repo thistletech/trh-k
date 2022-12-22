@@ -1,0 +1,214 @@
+#!/usr/bin/env bash
+#
+# This utility reads from a configuration file containing the GCP keyring/key
+# information, and prints out the GCP KMS-backed public-key string to add to
+# TRH's configuration file's public_keys array, if the keyring and signing key
+# are already created.  If the KMS resources do not exist, a new key pair and/or
+# a new keyring are generated.
+#
+# Before invoking the script, the user acount needs to obtain the following IAM
+# roles
+# - roles/cloudkms.signerVerifier
+# - roles/cloudkms.admin
+#
+# The user account then needs to login to the appropriate GCP project with
+#     gcloud auth login
+# and
+#     gcloud config set project PROJECT_ID
+#
+# Environment variable:
+#  THISTLE_OPENSSL: if set, path to an alternate openssl binary to use.
+#
+
+set -euo pipefail
+
+# Foreground color coding
+_RST="\033[0m" # resets color and format
+readonly _RST
+_RED="\033[0;31m"
+readonly _RED
+
+SCRIPT_DIR="$(cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+readonly SCRIPT_DIR
+
+# shellcheck source=/dev/null
+source "${SCRIPT_DIR}/parse-config" 
+
+declare -a config
+
+# Hardcode signing key purpose and algorithm
+KMS_KEY_PURPOSE="asymmetric-signing"
+readonly KMS_KEY_PURPOSE
+KMS_DEFAULT_ALGORITHM="ec-sign-p256-sha256"
+readonly KMS_DEFAULT_ALGORITHM
+
+# Allow THISTLE_OPENSSL environment variable to override openssl in path
+declare -r openssl="${THISTLE_OPENSSL:-$(command -v openssl)}"
+
+keygen() {
+  local is_debugging=false
+  local config_path=""
+  # GCP config items
+  local project
+  local location
+  local keyring
+  local keyname
+
+  while getopts ":hc:v" opt; do
+    case ${opt} in
+      h )
+        usage
+        exit 0 ;;
+      v )
+        is_debugging=true ;;
+      c )
+        config_path="$OPTARG" ;;
+      \? )
+        echo "Invalid optoin: $OPTARG"
+        exit 1 ;;
+      : )
+        echo "Invalid option: $OPTARG requires an argument"
+        exit 1 ;;
+      esac
+  done
+
+  shift $((OPTIND - 1))
+
+  if [[ "$#" != 0 ]]; then
+    usage
+    exit 1
+  fi
+
+  if [ -z "$config_path" ] || [ "${config_path:0:1}" = "-" ]; then
+    echo "error: missing -c or argument"
+    usage
+    exit 1
+  fi
+
+  if "$is_debugging"; then
+    set -x
+  fi
+
+  # Perform self test after command line argument parsing
+  self_test
+
+  parse_config "$config_path"
+  project="${config[0]}"
+  location="${config[1]}"
+  keyring="${config[2]}"
+  keyname="${config[3]}"
+
+  # Make sure we're in correct project
+  check_project "$project"
+  list_pubkey "$location" "$keyring" "$keyname" || \
+    new_keypair "$project" "$location" "$keyring" "$keyname"
+}
+
+usage() {
+  echo "Usage:"
+  echo "  $0 -c CONFIG_FILE"
+  echo "    If GCP KMS resources in CONFIG_FILE are already provisioned, prints out public key string."
+  echo "    Otherwise, generates a new key pair in GCP KMS as specified in CONFIG_FILE."
+  echo "    User needs to login to appropriate GCP account and project before invoking command."
+}
+
+###########################################
+# Self tests
+###########################################
+err() {
+  echo -e "${_RED}$*${_RST}" >&2
+  exit 1
+}
+
+# Check dependent software that is not managed by Hermit
+self_test() {
+  # Check openssl
+  [[ -n ${openssl} ]] || \
+    err "cannot find openssl. Please install openssl first"
+
+  # Check can call openssl
+  ${openssl} version &>/dev/null || \
+    err "cannot call openssl. Please install openssl first"
+
+  # Check base64
+  command -v base64 &>/dev/null || \
+    err "cannot find command base64. Please install coreutils first"
+}
+
+###########################################
+# Internal helper functions
+###########################################
+
+list_pubkey() {
+  local location="$1"
+  local keyring="$2"
+  local keyname="$3"
+  # First invocation to check existence
+  gcloud kms keys versions get-public-key "1" \
+    --location "$location" \
+    --keyring "$keyring" \
+    --key "$keyname" &>/dev/null || return 1
+  # Second invocation to get public key value
+  pubkey="$(gcloud kms keys versions get-public-key "1" \
+    --location "$location" \
+    --keyring "$keyring" \
+    --key "$keyname" | \
+    openssl ec -pubin -noout -text 2>/dev/null | \
+      grep -A5 "pub:" | tail -n5 | \
+      xargs | tr -d ':' | tr -d ' ' | \
+      xxd -r -p | base64 | tr -d '\n' 2>/dev/null)"
+  echo "Please add the following public key to the public_keys array in TRH configuration:"
+  echo "ecdsa:${pubkey}"
+}
+
+new_keypair() {
+  local project="$1"
+  local location="$2"
+  local keyring="$3"
+  local keyname="$4"
+  local keyring_uri="projects/$project/locations/$location/keyRings/$keyring"
+  local key_uri="$keyring_uri/cryptoKeys/$keyname"
+
+  check_project "$project"
+
+  read -p "Generating ECDSA signing key \"$keyname\" \
+in keyring \"$keyring\" \
+in GCP project \"$project ($location)\". \
+Proceed (N/y)? " \
+    -n 1 -r USER_RESPONSE
+  if [[ ! ${USER_RESPONSE} =~ ^[Yy]$ ]]; then
+    exit 1
+  fi
+  echo >&2
+
+  if ! gcloud kms keys list --keyring "$keyring" --location "$location" --uri 2>/dev/null | \
+    grep "$key_uri" &>/dev/null; then
+    if gcloud kms keyrings list --location "$location" --uri 2>/dev/null | \
+      grep "$keyring_uri" &>/dev/null; then
+      gcloud kms keys create "$keyname" --keyring "$keyring" \
+        --location "$location" \
+        --purpose "$KMS_KEY_PURPOSE" \
+        --default-algorithm "$KMS_DEFAULT_ALGORITHM"
+    else
+      gcloud kms keyrings create "$keyring" --location "$location"
+      # List keyrings for debugging
+      # gcloud kms keyrings list --location "$location"
+
+      # Add some delay
+      sleep 5
+      gcloud kms keys create "$keyname" --keyring "$keyring" \
+        --location "$location" \
+        --purpose "$KMS_KEY_PURPOSE" \
+        --default-algorithm "$KMS_DEFAULT_ALGORITHM"
+      sleep 5
+      # List keys for debugging
+      #gcloud kms keys list --keyring "$keyring" --location "$location"
+    fi
+  fi
+
+  list_pubkey "$location" "$keyring" "$keyname"
+
+}
+
+# Do it
+keygen "$@"

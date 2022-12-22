@@ -1,0 +1,6 @@
+{
+    "project": "my-awesome-gcp-project",
+    "location": "us-west1",
+    "keyring": "dummy-keyring-for-trh-k",
+    "keyname": "dummy-key-for-trh-k"
+}

@@ -1,0 +1,109 @@
+#!/usr/bin/env bash
+#
+#
+set -euo pipefail
+
+# Foreground color coding
+_RST="\033[0m" # resets color and format
+readonly _RST
+_RED="\033[0;31m"
+readonly _RED
+
+SCRIPT_DIR="$(cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+readonly SCRIPT_DIR
+
+# shellcheck source=/dev/null
+source "${SCRIPT_DIR}/parse-config" 
+
+declare -a config
+
+sign() {
+  local is_debugging=false
+  local config_path=""
+  while getopts ":hc:v" opt; do
+    case ${opt} in
+      h )
+        usage
+        exit 0 ;;
+      v )
+        is_debugging=true ;;
+      c )
+        config_path="$OPTARG" ;;
+      \? )
+        echo "Invalid optoin: $OPTARG"
+        exit 1 ;;
+      : )
+        echo "Invalid option: $OPTARG requires an argument"
+        exit 1 ;;
+      esac
+  done
+
+  shift $((OPTIND - 1))
+
+  if [[ "$#" != 1 ]]; then
+    usage
+    exit 1
+  fi
+
+  if [ -z "$config_path" ] || [ "${config_path:0:1}" = "-" ]; then
+    echo "error: missing -c or argument"
+    usage
+    exit 1
+  fi
+
+  if "$is_debugging"; then
+    set -x
+  fi
+
+  # Perform self test after command line argument parsing
+  self_test
+
+  local signable="${1}"
+  local payload_file
+  payload_file="$(mktemp)"
+  local signature_file
+  signature_file="$(mktemp)"
+
+  parse_config "$config_path"
+  project="${config[0]}"
+  location="${config[1]}"
+  keyring="${config[2]}"
+  keyname="${config[3]}"
+
+  # Make sure we're in correct project
+  check_project "$project"
+
+  echo -n "${signable}" > "${payload_file}"
+  gcloud kms asymmetric-sign --version 1 \
+    --keyring "$keyring" \
+    --key "$keyname" \
+    --location "$location" \
+    --digest-algorithm sha256 \
+    --input-file "$payload_file" \
+    --signature-file "$signature_file"
+  base64 <"$signature_file" | tr -d '\n'
+}
+
+usage() {
+  echo "Usage:"
+  echo "  $0 -c CONFIG_FILE SIGNABLE_STRING"
+  echo "    Signs SIGNABLE_STRING using GCP resources specified in CONFIG_FILE"
+}
+
+###########################################
+# Self tests
+###########################################
+err() {
+  echo -e "${_RED}$*${_RST}" >&2
+  exit 1
+}
+
+# Check dependent software that is not managed by Hermit
+self_test() {
+  # Check base64
+  command -v base64 &>/dev/null || \
+    err "cannot find command base64. Please install coreutils first"
+}
+
+# Do it
+sign "$@"
