@@ -86,7 +86,7 @@ sign() {
 
 usage() {
   echo "Usage:"
-  echo "  $0 -c CONFIG_FILE SIGNABLE_STRING"
+  echo "  ${0##*/} -c CONFIG_FILE SIGNABLE_STRING"
   echo "    Signs SIGNABLE_STRING using GCP resources specified in CONFIG_FILE"
 }
 

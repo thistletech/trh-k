@@ -238,7 +238,7 @@ trh-k🐚 $ tuc --log-level=info -c config.json
 
   ```text
   Usage:
-    thistle-bin/keygen-gcp-k -c CONFIG_FILE
+    keygen-gcp-k -c CONFIG_FILE
       If GCP KMS resources in CONFIG_FILE are already provisioned, prints out public key string.
       Otherwise, generates a new key pair in GCP KMS as specified in CONFIG_FILE.
       User needs to login to appropriate GCP account and project before invoking command.
@@ -248,6 +248,6 @@ trh-k🐚 $ tuc --log-level=info -c config.json
 
   ```text
   Usage:
-    thistle-bin/sign-gcp-k -c CONFIG_FILE SIGNABLE_STRING
+    sign-gcp-k -c CONFIG_FILE SIGNABLE_STRING
       Signs SIGNABLE_STRING using GCP resources specified in CONFIG_FILE
   ```
