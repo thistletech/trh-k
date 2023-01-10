@@ -106,7 +106,7 @@ keygen() {
 
 usage() {
   echo "Usage:"
-  echo "  $0 -c CONFIG_FILE"
+  echo "  ${0##*/} -c CONFIG_FILE"
   echo "    If GCP KMS resources in CONFIG_FILE are already provisioned, prints out public key string."
   echo "    Otherwise, generates a new key pair in GCP KMS as specified in CONFIG_FILE."
   echo "    User needs to login to appropriate GCP account and project before invoking command."
