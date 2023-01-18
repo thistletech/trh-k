@@ -55,3 +55,21 @@ version "0.1.8" {
     }
   }
 }
+
+version "0.1.9" {
+  platform darwin {
+    source = "https://downloads.thistle.tech/embedded-client/0.1.9/trh-x86_64-apple-darwin"
+    sha256 = "45d36af9b2b48589d5872f9420e724833b18ad203782f359fd5d361b7186fd25"
+    on unpack {
+      rename { from = "${root}/trh-x86_64-apple-darwin" to = "${root}/trh" }
+    }
+  }
+
+  platform linux amd64 {
+    source = "https://downloads.thistle.tech/embedded-client/0.1.9/trh-x86_64-unknown-linux-musl"
+    sha256 = "620627d1aa212fa51561774293a317e365d22e018ac7c96364105fac0d525fde"
+    on unpack {
+      rename { from = "${root}/trh-x86_64-unknown-linux-musl" to = "${root}/trh" }
+    }
+  }
+}

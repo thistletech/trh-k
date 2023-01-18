@@ -55,3 +55,21 @@ version "0.1.8" {
     }
   }
 }
+
+version "0.1.9" {
+  platform darwin {
+    source = "https://downloads.thistle.tech/embedded-client/0.1.9/tuc-x86_64-apple-darwin"
+    sha256 = "d3b5afc6504cdac89561bc656644e7fb2f3bb179d60707864cec9284f66b0564"
+    on unpack {
+      rename { from = "${root}/tuc-x86_64-apple-darwin" to = "${root}/tuc" }
+    }
+  }
+
+  platform linux amd64 {
+    source = "https://downloads.thistle.tech/embedded-client/0.1.9/tuc-x86_64-unknown-linux-musl"
+    sha256 = "606cfdaecdca51762d4b6ec0c09c661c1c14acc547b380155ab24f74f3c56fbd"
+    on unpack {
+      rename { from = "${root}/tuc-x86_64-unknown-linux-musl" to = "${root}/tuc" }
+    }
+  }
+}
