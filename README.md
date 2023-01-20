@@ -238,6 +238,8 @@ trh-k🐚 $ tuc --log-level=info -c config.json
 
   ```text
   Usage:
+    keygen-gcp-k -h
+      Display this help message
     keygen-gcp-k -c CONFIG_FILE
       If GCP KMS resources in CONFIG_FILE are already provisioned, prints out public key string.
       Otherwise, generates a new key pair in GCP KMS as specified in CONFIG_FILE.
@@ -248,6 +250,8 @@ trh-k🐚 $ tuc --log-level=info -c config.json
 
   ```text
   Usage:
+    sign-gcp-k -h
+      Display this help message
     sign-gcp-k -c CONFIG_FILE SIGNABLE_STRING
       Signs SIGNABLE_STRING using GCP resources specified in CONFIG_FILE
   ```
