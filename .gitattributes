@@ -1,0 +1,3 @@
+# Ignore hermit configurations under `bin/` from linguist
+# Cf. https://github.com/github/linguist/blob/master/docs/overrides.md
+bin/** linguist-vendored
