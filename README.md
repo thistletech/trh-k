@@ -199,7 +199,7 @@ trh-k🐚 $ export THISTLE_TOKEN=$(cat)
 # Prepare a local OTA bundle
 trh-k🐚 $ mkdir -p rel/tmp
 trh-k🐚 $ echo "This is a test" > rel/tmp/test.txt
-trh-k🐚 $ trh --external-sign "trh-k/thistle-bin/sign-gcp-k -c gcp_config.json" prepare -t=./rel
+trh-k🐚 $ trh --external-sign "trh-k/thistle-bin/sign-gcp-k -c gcp_config.json" prepare -t=./rel -f=/
 Read manifest at "./manifest.json"
 Processed file "./rel/tmp/test.txt"
 Executing external signing command
@@ -209,16 +209,22 @@ Manifest amended successfully
 # Release OTA bundle to Thistle backend
 trh-k🐚 $ trh --external-sign "trh-k/thistle-bin/sign-gcp-k -c gcp_config.json" release
 Read manifest at "./manifest.json"
+Executing external signing command
+=====
+=====
+Prepared backup release
 Uploaded asset test.txt
 Executing external signing command
 =====
 =====
+Backup manifest uploaded successfully
 Manifest uploaded successfully
+Local compressed artifacts removed
 ```
 
 To update an existing release, re-run `trh prepare` and `trh release` commands
 with the `--external-sign` argument exactly as above, and as described
-[here](https://docs.thistle.tech/getting_started/file#update-an-existing-release),
+[here](https://docs.thistle.tech/get_started/file#update-an-existing-release),
 to get the manifest updated and signed, and OTA bundle uploaded to Thistle
 backend.
 
@@ -226,10 +232,15 @@ backend.
 
 On a device running `tuc`, run the following command to test the released OTA
 bundle, using `config.json`. This is similar to what is described
-[here](https://docs.thistle.tech/getting_started/file#upload-and-test-deployed-release).
+[here](https://docs.thistle.tech/get_started/file#upload-and-test-deployed-release).
 
 ```bash
 trh-k🐚 $ tuc --log-level=info -c config.json
+...
+!! setting update status to Pass
+.. signature verified with public key #0 type ecdsa
+.. reported data to server
+~~ next check in 3600s
 ```
 
 ## Synopsis of trh-k Commands
