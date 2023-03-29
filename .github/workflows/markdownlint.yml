@@ -33,6 +33,6 @@ jobs:
           set -euxo pipefail
           cd ${{ github.workspace }}/
           mdl --version
-          for f in $(find . \( -path ./.git -o -path ./bin \) -prune -o -type f -name "*.md" -print); do
+          for f in $(find . \( -path ./.git -o -path ./bin -o -path ./.github \) -prune -o -type f -name "*.md" -print); do
             mdl "$f"
           done
