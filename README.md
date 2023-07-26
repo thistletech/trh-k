@@ -80,9 +80,9 @@ This step only needs to be done once per release signing key.
 
    ![Create New Project](img/new_project.png "Create New Project")
 
-2. In the newly created project "kms signing", in the upper right corner, click
-   the button "Access Token" to obtain the API token to be used as
-   `THISTLE_TOKEN` in the initialization step.
+2. In the newly created project "kms signing", visit the "Settings" section
+   of a project to obtain the API token to be used as `THISTLE_TOKEN` in the
+   initialization step below.
 
    ![Obtain Access Token](img/access_token.png "Obtain Access Token")
 
@@ -200,7 +200,7 @@ trh-k🐚 $ export THISTLE_TOKEN=$(cat)
 # Prepare a local OTA bundle
 trh-k🐚 $ mkdir -p rel/tmp
 trh-k🐚 $ echo "This is a test" > rel/tmp/test.txt
-trh-k🐚 $ trh --external-sign "trh-k/thistle-bin/sign-gcp-k -c gcp_config.json" prepare -t=./rel -f=/
+trh-k🐚 $ trh --external-sign "trh-k/thistle-bin/sign-gcp-k -c gcp_config.json" prepare -target=./rel --file-base-path=/
 Read manifest at "./manifest.json"
 Processed file "./rel/tmp/test.txt"
 Executing external signing command
