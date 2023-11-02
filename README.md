@@ -74,9 +74,9 @@ This step only needs to be done once per release signing key.
 
 ## Create Device Project and Obtain Access Token (One-Time Setup)
 
-1. Login to the [Thistle portal](https://app.thistle.tech/projects/), and create
-   a new project where your fleet of devices associated with the OTA bundle are
-   managed. In the example below, we name the project "kms signing".
+1. Login to the [Thistle Web app](https://app.thistle.tech/projects/), and
+   create a new project where your fleet of devices associated with the OTA
+   bundle are managed. In the example below, we name the project "kms signing".
 
    ![Create New Project](img/new_project.png "Create New Project")
 
@@ -90,14 +90,16 @@ This step only needs to be done once per release signing key.
 
 In the project initialization step, we generate a release manifest file
 (`manifest.json`) and a device configuration file (`config.json`) using the
-Thistle Release Helper (`trh`).
+[Thistle Release Helper
+(`trh`)](https://docs.thistle.tech/update/cli#thistle-release-helper-usage).
 
 - The manifest file will be used by a release operator, with the help of `trh`,
   to describe an OTA bundle for devices in the project.
 
 - The device configuration file will be provisioned into a device where the
-  Thistle Update Client (`tuc`) runs, and can be used as a boilerplate template
-  for subsequent devices added to the project.
+  [Thistle Update Client
+  (TUC)](https://docs.thistle.tech/update/cli#update-client-usage) runs, and can
+  be used as a boilerplate template for subsequent devices added to the project.
 
 On a Linux or macOS machine, initialize the project as follows.
 
@@ -143,16 +145,15 @@ step.
   `name` and`device_id` can be device unique, and customizable according to a
   customer's device management setting.
 
-  Note that [Thistle Update Client
-  (TUC)](https://docs.thistle.tech/update_client/overview) and Thistle's backend
-  by default assume a "self-provisioning (aka self-enrollment)" model: Suppose
-  `device_id` is missing from `config.json`, and `device_enrollment_token` is
-  valid.  During the first HTTP request from TUC to the backend `device_id` is
-  not present. In this case, this request will be viewed as a "device
-  provisioning" request (authorized by `device_enrollment_token`): a new, unique
-  `device_id` will be automatically created on the backend, and returned to the
-  client to persist.  Subsequent client-initiated requests will have this
-  `device_id` value included for device identification.
+  Note that Thistle Update Client (TUC) and Thistle's backend by default assume
+  a "self-provisioning (aka self-enrollment)" model: Suppose `device_id` is
+  missing from `config.json`, and `device_enrollment_token` is valid.  During
+  the first HTTP request from TUC to the backend `device_id` is not present. In
+  this case, this request will be viewed as a "device provisioning" request
+  (authorized by `device_enrollment_token`): a new, unique `device_id` will be
+  automatically created on the backend, and returned to the client to persist.
+  Subsequent client-initiated requests will have this `device_id` value included
+  for device identification.
 
   Thistle's OTA update system can also be customized to support a device key
   provisioning mechanism with pre-generated, pre-configured `device_name` and
@@ -181,10 +182,10 @@ step.
 
 ## Prepare, Sign and Release OTA Bundle
 
-As with [File Update](https://docs.thistle.tech/getting_started/file) and [Full
-System Update](https://docs.thistle.tech/getting_started/rpi), we use `trh`'s
-subcommands `prepare` and `release` to prepare, sign and release OTA bundles,
-but also supply the `--external-sign` argument for KMS signing.
+As with [File Update](https://docs.thistle.tech/update/get_started/file_update)
+and [Full System Update](https://docs.thistle.tech/update/get_started/rpi), we
+use `trh`'s subcommands `prepare` and `release` to prepare, sign and release OTA
+bundles, but also supply the `--external-sign` argument for KMS signing.
 
 Let's use the following file update case as an example.
 
@@ -225,7 +226,7 @@ Local compressed artifacts removed
 
 To update an existing release, re-run `trh prepare` and `trh release` commands
 with the `--external-sign` argument exactly as above, and as described
-[here](https://docs.thistle.tech/get_started/file#update-an-existing-release),
+[here](https://docs.thistle.tech/update/get_started/file_update#upload-a-new-update-bundle),
 to get the manifest updated and signed, and OTA bundle uploaded to Thistle
 backend.
 
@@ -233,7 +234,7 @@ backend.
 
 On a device running `tuc`, run the following command to test the released OTA
 bundle, using `config.json`. This is similar to what is described
-[here](https://docs.thistle.tech/get_started/file#upload-and-test-deployed-release).
+[here](https://docs.thistle.tech/update/get_started/file_update#upload-and-test-deployed-release).
 
 ```bash
 trh-k🐚 $ tuc --log-level=info -c config.json
