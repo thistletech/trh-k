@@ -3,6 +3,30 @@ binaries = ["trh"]
 test = "trh --version"
 homepage = "https://docs.thistle.tech/release_helper/overview"
 
+version "0.2.0" {
+  platform "linux" {
+    source = "https://downloads.thistle.tech/embedded-client/${version}/trh-${version}-${xarch}-unknown-linux-musl.gz"
+
+    on "unpack" {
+      rename {
+        from = "${root}/trh-${version}-${xarch}-unknown-linux-musl"
+        to = "${root}/trh"
+      }
+    }
+  }
+
+  platform "darwin" {
+    source = "https://downloads.thistle.tech/embedded-client/${version}/trh-${version}-x86_64-apple-darwin.gz"
+
+    on "unpack" {
+      rename {
+        from = "${root}/trh-${version}-x86_64-apple-darwin"
+        to = "${root}/trh"
+      }
+    }
+  }
+}
+
 version "0.1.11" "0.1.12" {
   platform "linux" {
     source = "https://downloads.thistle.tech/embedded-client/${version}/trh-${version}-${xarch}-unknown-linux-musl"

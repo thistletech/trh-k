@@ -3,6 +3,30 @@ binaries = ["tuc"]
 test = "tuc --version"
 homepage = "https://docs.thistle.tech/update_client/overview"
 
+version "0.2.0" {
+  platform "linux" {
+    source = "https://downloads.thistle.tech/embedded-client/${version}/tuc-${version}-${xarch}-unknown-linux-musl.gz"
+
+    on "unpack" {
+      rename {
+        from = "${root}/tuc-${version}-${xarch}-unknown-linux-musl"
+        to = "${root}/tuc"
+      }
+    }
+  }
+
+  platform "darwin" {
+    source = "https://downloads.thistle.tech/embedded-client/${version}/tuc-${version}-x86_64-apple-darwin.gz"
+
+    on "unpack" {
+      rename {
+        from = "${root}/tuc-${version}-x86_64-apple-darwin"
+        to = "${root}/tuc"
+      }
+    }
+  }
+}
+
 version "0.1.11" "0.1.12" {
   platform "linux" {
     source = "https://downloads.thistle.tech/embedded-client/${version}/tuc-${version}-${xarch}-unknown-linux-musl"
