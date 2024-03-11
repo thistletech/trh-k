@@ -1,0 +1,65 @@
+name: 'Sanity Checks'
+
+on:
+  push:
+    branches:
+    - 'main'
+  pull_request:
+    branches:
+    - 'main'
+
+jobs:
+  # markdownlint: https://github.com/markdownlint/markdownlint
+  mdl:
+    name: 'markdownlint'
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: 'Checkout repository'
+        uses: actions/checkout@v4.1.1
+      - name: "Install Ruby"
+        # v1.172.0
+        uses: ruby/setup-ruby@d4526a55538b775af234ba4af27118ed6f8f6677
+        with:
+          ruby-version: '3.3'
+          bundler-cache: true
+      - name: 'Install mdl'
+        run: gem install mdl
+      - name: 'Run mdl'
+        run: |
+          set -euxo pipefail
+          cd ${{ github.workspace }}/
+          mdl --version
+          for f in $(find . \( -path ./.git -o -path ./bin -o -path ./.github \) -prune -o -type f -name "*.md" -print); do
+            mdl "$f"
+          done
+
+  shellcheck:
+    name: "shellcheck"
+    strategy:
+      fail-fast: false
+      # Run on Linux
+      matrix:
+        os: [ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4.1.1
+      - name: Install shellcheck on Ubuntu
+        run: |
+          sudo apt update
+          sudo apt install shellcheck -y
+
+      - name: Run shellcheck
+        run: |
+          set -euxo pipefail
+          cd ${{ github.workspace }}/
+          shellcheck --version
+          for f in $(find . \( -path ./.git -o -path ./bin \) -prune -o -type f -print); do
+            if file "$f" | grep "shell script" &>/dev/null; then
+              shellcheck -x "$f"
+            fi
+          done

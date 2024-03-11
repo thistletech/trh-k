@@ -1,7 +1,6 @@
 # trh-k: Thistle Release Helper with KMS Signing
 
-[![Shellcheck](https://github.com/thistletech/trh-k/actions/workflows/shellcheck.yml/badge.svg)](https://github.com/thistletech/trh-k/actions/workflows/shellcheck.yml)
-[![Markdown Lint](https://github.com/thistletech/trh-k/actions/workflows/markdownlint.yml/badge.svg)](https://github.com/thistletech/trh-k/actions/workflows/markdownlint.yml)
+[![Sanity checks](https://github.com/thistletech/trh-k/actions/workflows/sanity.yml/badge.svg)](https://github.com/thistletech/trh-k/actions/workflows/sanity.yml)
 
 This repository contains the tools and instructions for releasing a Thistle OTA
 update bundle signed with a key managed in a Cloud KMS (key management system).
