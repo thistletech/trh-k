@@ -3,7 +3,7 @@ binaries = ["tuc"]
 test = "tuc --version"
 homepage = "https://docs.thistle.tech/update_client/overview"
 
-version "0.2.0" "1.0.0" "1.0.1" "1.1.0" "1.1.1" "1.2.0" "1.2.1" "1.3.0" {
+version "0.2.0" "1.0.0" "1.0.1" "1.1.0" "1.1.1" "1.2.0" "1.2.1" "1.3.0" "1.4.0" {
   platform "linux" {
     source = "https://downloads.thistle.tech/embedded-client/${version}/tuc-${version}-${xarch}-unknown-linux-musl.gz"
 
