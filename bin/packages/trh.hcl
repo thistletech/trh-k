@@ -108,4 +108,6 @@ sha256sums = {
   "https://downloads.thistle.tech/embedded-client/1.2.1/trh-1.2.1-x86_64-apple-darwin.gz": "59fdf1d992f08d985617a30f34ccbc8ef273c1ea82e7b0886edf60131710532e",
   "https://downloads.thistle.tech/embedded-client/1.3.0/trh-1.3.0-x86_64-apple-darwin.gz": "19250b94b5f128cb2334567440dca2ec2047179ecad6bd77abd7c2b67564fbe8",
   "https://downloads.thistle.tech/embedded-client/1.3.0/trh-1.3.0-x86_64-unknown-linux-musl.gz": "9530ffbf714a4a62b9fbbd7b537e9294968966ac717727bf744226312769b32b",
+  "https://downloads.thistle.tech/embedded-client/1.4.0/trh-1.4.0-x86_64-apple-darwin.gz": "9f411d2df2870523f0e2021d831d9d911462aef75472120e994fe33618435cd6",
+  "https://downloads.thistle.tech/embedded-client/1.4.0/trh-1.4.0-x86_64-unknown-linux-musl.gz": "574e2d884fdabdf87bc03fd08d65845af7b63f7c8383989106b8956611db060d",
 }
