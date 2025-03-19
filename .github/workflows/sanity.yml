@@ -21,8 +21,8 @@ jobs:
       - name: 'Checkout repository'
         uses: actions/checkout@v4.1.1
       - name: "Install Ruby"
-        # v1.172.0
-        uses: ruby/setup-ruby@d4526a55538b775af234ba4af27118ed6f8f6677
+        # v1.227.0
+        uses: ruby/setup-ruby@1a615958ad9d422dd932dc1d5823942ee002799f
         with:
           ruby-version: '3.3'
           bundler-cache: true
