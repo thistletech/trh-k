@@ -3,7 +3,7 @@ binaries = ["tuc"]
 test = "tuc --version"
 homepage = "https://docs.thistle.tech/update_client/overview"
 
-version "0.2.0" "1.0.0" "1.0.1" "1.1.0" "1.1.1" "1.2.0" "1.2.1" "1.3.0" "1.4.0" {
+version "0.2.0" "1.0.0" "1.0.1" "1.1.0" "1.1.1" "1.2.0" "1.2.1" "1.3.0" "1.4.0" "1.5.0" {
   platform "linux" {
     source = "https://downloads.thistle.tech/embedded-client/${version}/tuc-${version}-${xarch}-unknown-linux-musl.gz"
 
@@ -110,4 +110,6 @@ sha256sums = {
   "https://downloads.thistle.tech/embedded-client/1.3.0/tuc-1.3.0-x86_64-apple-darwin.gz": "ca14cd2b0db5aca8f80c9cec31ed5285d2e525d3c253aaf779ae21530a143dba",
   "https://downloads.thistle.tech/embedded-client/1.4.0/tuc-1.4.0-x86_64-apple-darwin.gz": "01a07e571b3ddb23281bab69b2ace36b40bf7aebe170c3fe9d3e4251fa63096c",
   "https://downloads.thistle.tech/embedded-client/1.4.0/tuc-1.4.0-x86_64-unknown-linux-musl.gz": "b7d4213bdb551af892716f9973407dedc8df165e7f7d0a4294a891d5566e41b1",
+  "https://downloads.thistle.tech/embedded-client/1.5.0/tuc-1.5.0-x86_64-apple-darwin.gz": "4ae43f0535cb3bd8432d21c34a303c7b802c613256a782de84246059c087c4e4",
+  "https://downloads.thistle.tech/embedded-client/1.5.0/tuc-1.5.0-x86_64-unknown-linux-musl.gz": "5747e99ffcda51034c9a8400df480c7a6f7b773eaa98c90b8fc218471eb4115f",
 }
