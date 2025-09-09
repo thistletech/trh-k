@@ -3,7 +3,8 @@ binaries = ["tuc"]
 test = "tuc --version"
 homepage = "https://docs.thistle.tech/update_client/overview"
 
-version "0.2.0" "1.0.0" "1.0.1" "1.1.0" "1.1.1" "1.2.0" "1.2.1" "1.3.0" "1.4.0" "1.5.0" "1.6.0" {
+version "0.2.0" "1.0.0" "1.0.1" "1.1.0" "1.1.1" "1.2.0" "1.2.1" "1.3.0" "1.4.0" "1.5.0"
+        "1.6.0" {
   platform "linux" {
     source = "https://downloads.thistle.tech/embedded-client/${version}/tuc-${version}-${xarch}-unknown-linux-musl.gz"
 
@@ -112,4 +113,19 @@ sha256sums = {
   "https://downloads.thistle.tech/embedded-client/1.4.0/tuc-1.4.0-x86_64-unknown-linux-musl.gz": "b7d4213bdb551af892716f9973407dedc8df165e7f7d0a4294a891d5566e41b1",
   "https://downloads.thistle.tech/embedded-client/1.5.0/tuc-1.5.0-x86_64-apple-darwin.gz": "4ae43f0535cb3bd8432d21c34a303c7b802c613256a782de84246059c087c4e4",
   "https://downloads.thistle.tech/embedded-client/1.5.0/tuc-1.5.0-x86_64-unknown-linux-musl.gz": "5747e99ffcda51034c9a8400df480c7a6f7b773eaa98c90b8fc218471eb4115f",
+  "https://downloads.thistle.tech/embedded-client/0.1.12/tuc-0.1.12-aarch64-unknown-linux-musl": "3c45c984bafbcf9ca7d0fee033bfe693a58534ad63efcb318872bdbfce569252",
+  "https://downloads.thistle.tech/embedded-client/0.2.0/tuc-0.2.0-aarch64-unknown-linux-musl.gz": "e2521cfc8f9789ee484d6dc879e18111d8aac6089616d411af5bb3452d457ffa",
+  "https://downloads.thistle.tech/embedded-client/1.0.1/tuc-1.0.1-aarch64-unknown-linux-musl.gz": "b9dc2619cd581337316e5c04d7c05aff28762b51c08c63386a7951fa6f172e3c",
+  "https://downloads.thistle.tech/embedded-client/1.1.1/tuc-1.1.1-aarch64-unknown-linux-musl.gz": "0449ab4f23a35113cb1f93a1c8076ee9cc72074d7fae4c782d3ed1d783c77ca4",
+  "https://downloads.thistle.tech/embedded-client/1.2.0/tuc-1.2.0-aarch64-unknown-linux-musl.gz": "c43fd067d01cbf69fba2aaeeebd1ec15e96a936b830ea30a33907b73ef4aab89",
+  "https://downloads.thistle.tech/embedded-client/1.2.1/tuc-1.2.1-aarch64-unknown-linux-musl.gz": "ef4cd7603e3c2c22c259f25fb5efac4c150d106a7b9e4c56157128984aebcd84",
+  "https://downloads.thistle.tech/embedded-client/1.3.0/tuc-1.3.0-aarch64-unknown-linux-musl.gz": "f96d15a3b49652227980c96e48eb59eaf9b3f3fee9327da98157e9bc74149005",
+  "https://downloads.thistle.tech/embedded-client/1.5.0/tuc-1.5.0-aarch64-unknown-linux-musl.gz": "f70df013ff4d85ccfd507cc1d919c60f164f4390d9c05e16f00bf46514bc3c70",
+  "https://downloads.thistle.tech/embedded-client/1.6.0/tuc-1.6.0-x86_64-apple-darwin.gz": "f466ab3b001c451e306a1090342f1a8ceb435eee62e48dbe9d1ccda2d5fd82d2",
+  "https://downloads.thistle.tech/embedded-client/1.6.0/tuc-1.6.0-x86_64-unknown-linux-musl.gz": "5b407e6fdf56b71a73a2bb876e901141ee5a45d7a2c33499828ecf6bc4d826a3",
+  "https://downloads.thistle.tech/embedded-client/1.6.0/tuc-1.6.0-aarch64-unknown-linux-musl.gz": "56f45bf3607ecd33666374aa8ef6e7860796c74c02f00a8ec48d9befe6ea60b3",
+  "https://downloads.thistle.tech/embedded-client/0.1.11/tuc-0.1.11-aarch64-unknown-linux-musl": "2380d831b8dc03cd5a674bfa08231d3f91ed40785aabcf290120f9ff6889cd8a",
+  "https://downloads.thistle.tech/embedded-client/1.0.0/tuc-1.0.0-aarch64-unknown-linux-musl.gz": "930388e06c5d500a7ed51c9e5ee50e28ea1c29ae0eadbe8b0b9c8f37e7ffcb2e",
+  "https://downloads.thistle.tech/embedded-client/1.1.0/tuc-1.1.0-aarch64-unknown-linux-musl.gz": "e7b46ca5e5c3f678e8f14f66d507b36c2c106844d4d0f5066463aba9a911915d",
+  "https://downloads.thistle.tech/embedded-client/1.4.0/tuc-1.4.0-aarch64-unknown-linux-musl.gz": "afabf8ce9d3e112245d7eaf420e1494a4f3d68255d234d712e53ff930937b279",
 }

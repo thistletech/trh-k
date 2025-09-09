@@ -3,7 +3,8 @@ binaries = ["trh"]
 test = "trh --version"
 homepage = "https://docs.thistle.tech/release_helper/overview"
 
-version "0.2.0" "1.0.0" "1.0.1" "1.1.0" "1.1.1" "1.2.0" "1.2.1" "1.3.0" "1.4.0" "1.5.0" "1.6.0" {
+version "0.2.0" "1.0.0" "1.0.1" "1.1.0" "1.1.1" "1.2.0" "1.2.1" "1.3.0" "1.4.0" "1.5.0"
+        "1.6.0" {
   platform "linux" {
     source = "https://downloads.thistle.tech/embedded-client/${version}/trh-${version}-${xarch}-unknown-linux-musl.gz"
 
@@ -112,4 +113,19 @@ sha256sums = {
   "https://downloads.thistle.tech/embedded-client/1.4.0/trh-1.4.0-x86_64-unknown-linux-musl.gz": "574e2d884fdabdf87bc03fd08d65845af7b63f7c8383989106b8956611db060d",
   "https://downloads.thistle.tech/embedded-client/1.5.0/trh-1.5.0-x86_64-apple-darwin.gz": "3f48dd78ac8044182adcb39f7b5bafc22cf0a4a4715296fea583387e9dbebfd2",
   "https://downloads.thistle.tech/embedded-client/1.5.0/trh-1.5.0-x86_64-unknown-linux-musl.gz": "2a67a6ad7123a84ebfc8fc38eba082ed3bf012d22089d3132b7887c03a33bb7b",
+  "https://downloads.thistle.tech/embedded-client/0.1.12/trh-0.1.12-aarch64-unknown-linux-musl": "a30dc9535cba403b9b3d6298863477ab0b2c078fc675af7707d3d2ccc2d08135",
+  "https://downloads.thistle.tech/embedded-client/0.2.0/trh-0.2.0-aarch64-unknown-linux-musl.gz": "d1a7f6aeba59ecdc307d56f6a3e88c75213632fd66080b93c0e21c9536a42df2",
+  "https://downloads.thistle.tech/embedded-client/1.0.0/trh-1.0.0-aarch64-unknown-linux-musl.gz": "4ec3a8b406641c13f1d42350c28fbf7f9d7c6fc7b24b92470e6bc3605fd59c39",
+  "https://downloads.thistle.tech/embedded-client/1.1.0/trh-1.1.0-aarch64-unknown-linux-musl.gz": "1f0407537a6dccc6b841406773ceb3b1e82f3baaf1ee913fbc378ee35d411009",
+  "https://downloads.thistle.tech/embedded-client/1.1.1/trh-1.1.1-aarch64-unknown-linux-musl.gz": "a9fdd7c79926df341ae8194c38674abf9431ff145c869116c7651c16bf12224b",
+  "https://downloads.thistle.tech/embedded-client/1.2.0/trh-1.2.0-aarch64-unknown-linux-musl.gz": "2e84ecd900cfac30a5fd8c702c11a63652d15d7f88d100f002a65c8688103582",
+  "https://downloads.thistle.tech/embedded-client/1.2.1/trh-1.2.1-aarch64-unknown-linux-musl.gz": "8e3f16631c26094f0f21073ccc9fe501982b8dc592d9a3da8ed18b4e971cd05b",
+  "https://downloads.thistle.tech/embedded-client/1.3.0/trh-1.3.0-aarch64-unknown-linux-musl.gz": "07a44fd98c185a9b98c4da1ec5c3fbbe827a490a42beffb2ae97a4464b2bf1c9",
+  "https://downloads.thistle.tech/embedded-client/1.4.0/trh-1.4.0-aarch64-unknown-linux-musl.gz": "e93cd0594f18b518f2a270c7286ef29f7ad422f56ddebf64513fc4c5d341c9e1",
+  "https://downloads.thistle.tech/embedded-client/1.5.0/trh-1.5.0-aarch64-unknown-linux-musl.gz": "65befa7942bf5f784a3e5b7df87336f65d107b65cf06b7c775d2e303a5111b1e",
+  "https://downloads.thistle.tech/embedded-client/1.6.0/trh-1.6.0-x86_64-apple-darwin.gz": "02950474d8c76dc5d05994d4c2f21720bbe5574319beca6ccfdd720f406b9a0c",
+  "https://downloads.thistle.tech/embedded-client/0.1.11/trh-0.1.11-aarch64-unknown-linux-musl": "5cf8e91300907abf230c18ce6648729fb223a7e873a79e9120afe5460ff274ee",
+  "https://downloads.thistle.tech/embedded-client/1.0.1/trh-1.0.1-aarch64-unknown-linux-musl.gz": "cdbe5350cc3311bf8c9e77dfff816ad1c1d428400f13182fc21e681fc72d44fc",
+  "https://downloads.thistle.tech/embedded-client/1.6.0/trh-1.6.0-x86_64-unknown-linux-musl.gz": "eae717de594c2dddbf3639c34fd39379c6f8f307fca5ad28275cb4a326ec207c",
+  "https://downloads.thistle.tech/embedded-client/1.6.0/trh-1.6.0-aarch64-unknown-linux-musl.gz": "85910ad9407562659de4e795bf86ccbc4bfc7529d2ccf333619f8acd122628b7",
 }
