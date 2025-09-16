@@ -113,7 +113,6 @@ trh-k🐚 $ trh init
 Manifest generated at: "./manifest.json"
 ```
 
-
 - An example of `manifest.json` created in this step.
 
   ```json
