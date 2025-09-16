@@ -64,12 +64,12 @@ This step only needs to be done once per release signing key.
   # Keygen
   $ trh-k/thistle-bin/keygen-gcp-k -c gcp_config.json
   # Example output
-  Please add the following public key to the public_keys array in TRH configuration:
+  Please add the following public key to the public_keys array in TUC's configuration:
   ecdsa:BK9k+finvyLNVoqj5p07EvMh9OiOQ2DIK7w4uii1UVNc7yWB4lCI/Wk3I/PRHthBbPKSog3dis5ALzMdsHqSIC4=
   ```
 
-  Save the public key value for the initialization step later, or one can run
-  `keygen-gcp-k` again to print the public key value to the console.
+  Save the public key value for the test release update step later, or one can
+  run `keygen-gcp-k` again to print the public key value to the console.
 
 ## Create Device Project and Obtain Access Token (One-Time Setup)
 
@@ -88,17 +88,11 @@ This step only needs to be done once per release signing key.
 ## Initialization (One-Time Setup)
 
 In the project initialization step, we generate a release manifest file
-(`manifest.json`) and a device configuration file (`config.json`) using the
-[Thistle Release Helper
+(`manifest.json`) using the [Thistle Release Helper
 (`trh`)](https://docs.thistle.tech/update/cli#thistle-release-helper-usage).
 
 - The manifest file will be used by a release operator, with the help of `trh`,
   to describe an OTA bundle for devices in the project.
-
-- The device configuration file will be provisioned into a device where the
-  [Thistle Update Client
-  (TUC)](https://docs.thistle.tech/update/cli#update-client-usage) runs, and can
-  be used as a boilerplate template for subsequent devices added to the project.
 
 On a Linux or macOS machine, initialize the project as follows.
 
@@ -114,50 +108,10 @@ $ . trh-k/bin/activate-hermit
 # `Enter + Ctrl-d`. Use this command to prevent the sensitive $THISTLE_TOKEN
 # from being logged in shell history
 trh-k🐚 $ export THISTLE_TOKEN=$(cat)
-trh-k🐚 $ trh init --persist /path/to/device-persist-storage \
-  --public-key <PUBLIC_KEY>
-# Example:
-# trh init --persist /tmp/persist \
-#  --public-key "ecdsa:BK9k+finvyLNVoqj5p07EvMh9OiOQ2DIK7w4uii1UVNc7yWB4lCI/Wk3I/PRHthBbPKSog3dis5ALzMdsHqSIC4="
+trh-k🐚 $ trh init
 ...
 Manifest generated at: "./manifest.json"
-Configuration generated at path "./config.json"
 ```
-
-Here, `<PUBLIC_KEY>` is the public key value shown in the YubiKey provisioning
-step.
-
-- An example of `config.json` created in this step.
-
-  ```json
-  {
-    "name": "mydevice",
-    "persistent_directory": "/tmp/persist",
-    "device_enrollment_token": "redacted_device_token",
-    "public_keys": ["ecdsa:BK9k+finvyLNVoqj5p07EvMh9OiOQ2DIK7w4uii1UVNc7yWB4lCI/Wk3I/PRHthBbPKSog3dis5ALzMdsHqSIC4="]
-  }
-  ```
-
-  This configuration file can be used as a template for other devices in the
-  same project. While `persistent_directory`, `device_enrollment_token` and
-  `public_keys` values are shared by all devices in the project, the fields
-  `name` and`device_id` can be device unique, and customizable according to a
-  customer's device management setting.
-
-  Note that Thistle Update Client (TUC) and Thistle's backend by default assume
-  a "self-provisioning (aka self-enrollment)" model: Suppose `device_id` is
-  missing from `config.json`, and `device_enrollment_token` is valid.  During
-  the first HTTP request from TUC to the backend `device_id` is not present. In
-  this case, this request will be viewed as a "device provisioning" request
-  (authorized by `device_enrollment_token`): a new, unique `device_id` will be
-  automatically created on the backend, and returned to the client to persist.
-  Subsequent client-initiated requests will have this `device_id` value included
-  for device identification.
-
-  Thistle's OTA update system can also be customized to support a device key
-  provisioning mechanism with pre-generated, pre-configured `device_name` and
-  `device_id`, if it's better suited for a customer's device manufacturing
-  needs.
 
 - An example of `manifest.json` created in this step.
 
@@ -230,6 +184,55 @@ to get the manifest updated and signed, and OTA bundle uploaded to Thistle
 backend.
 
 ## Test Release Update
+
+On the machine where an OTA update release was published, generate a device
+configuraiton file `config.json`.
+
+```bash
+trh-k🐚 $ trh --signing-method="external" --public-key=<PUBLIC_KEY> \
+gen-device-config \
+--device-name="my-demo-device" \
+--enrollment-type="group-enroll" \
+--persist="${HOME}/thistle-ota"
+```
+
+Here, `<PUBLIC_KEY>` is the public key value shown in the KMS key pair creation
+step.
+
+- An example of `config.json` created by this command.
+
+  ```json
+  {
+    "name": "my-demo-device",
+    "persistent_directory": "/home/thistle/thistle-ota",
+    "device_enrollment_token": "redacted_device_token",
+    "public_keys": ["ecdsa:BK9k+finvyLNVoqj5p07EvMh9OiOQ2DIK7w4uii1UVNc7yWB4lCI/Wk3I/PRHthBbPKSog3dis5ALzMdsHqSIC4="]
+  }
+  ```
+
+  This configuration file can be used as a template for other devices in the
+  same project. While `persistent_directory`, `device_enrollment_token` and
+  `public_keys` values are shared by all devices in the project, the fields
+  `name` and`device_id` can be device unique, and customizable according to a
+  customer's device management setting.
+
+  Note that the above device configuration file is for a "group enrollment"
+  model: Suppose `device_id` is missing from `config.json`, and
+  `device_enrollment_token` is valid.  During the first HTTP request from TUC to
+  the backend `device_id` is not present. In this case, this request will be
+  viewed as a "device provisioning" request (authorized by
+  `device_enrollment_token`): a new, unique `device_id` and `device_token` will
+  be automatically created on the backend, and returned to the client to
+  persist.  Subsequent client-initiated requests will have `device_id` and
+  `device_token` values included for device authentication and authorization.
+
+A "pre-enrollment" model is also supported by TRH by setting
+`--enrollment-model="pre-enroll` in the command above. This will generate a
+`config.json` file with unique `device_id` and `device_token` in it, without
+obtaining a `device_enrollment_token`. For the two device provisioning models,
+refer to [Device
+Provisioning](https://docs.thistle.tech/update/device_provisioning) in Thistle's
+documentation.
 
 On a device running `tuc`, run the following command to test the released OTA
 bundle, using `config.json`. This is similar to what is described
