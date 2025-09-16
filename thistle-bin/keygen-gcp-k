@@ -2,7 +2,7 @@
 #
 # This utility reads from a configuration file containing the GCP keyring/key
 # information, and prints out the GCP KMS-backed public-key string to add to
-# TRH's configuration file's public_keys array, if the keyring and signing key
+# TUC's configuration file's public_keys array, if the keyring and signing key
 # are already created.  If the KMS resources do not exist, a new key pair and/or
 # a new keyring are generated.
 #
@@ -159,7 +159,7 @@ list_pubkey() {
       grep -A5 "pub:" | tail -n5 | \
       xargs | tr -d ':' | tr -d ' ' | \
       xxd -r -p | base64 | tr -d '\n' 2>/dev/null)"
-  echo "Please add the following public key to the public_keys array in TRH configuration:"
+  echo "Please add the following public key to the public_keys array in TUC's configuration:"
   echo "ecdsa:${pubkey}"
 }
 
