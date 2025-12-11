@@ -1,0 +1,30 @@
+name: 'Automatic HCL Update in Pull Requests'
+
+on:
+  # Only run on internal pull requests
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  update-hcls:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: 'Checkout repository'
+        uses: actions/checkout@v6.0.1
+        with:
+          ref: '${{ github.event.pull_request.head.ref }}'
+      - name: 'Update HCLs'
+        shell: bash
+        run: |
+          set -euxo pipefail
+          cd "${{ github.workspace }}/"
+          ./script/hcl-update.sh
+      - name: 'Commit changes to pull request'
+        uses: EndBug/add-and-commit@v9.1.4
+        with:
+            add: '["bin/packages/trh.hcl", "bin/packages/tuc.hcl"]'
+            message: 'Hermit upgrade TUC and TRH, adding digests'
+            author_name: 'githubactions[bot]'
+            author_email: 'githubactions[bot]@users.noreply.github.com'
